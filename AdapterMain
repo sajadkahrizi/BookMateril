@@ -1,0 +1,90 @@
+package ir.anishtan.man;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.andexert.library.RippleView;
+
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+
+public class AdapterMain extends RecyclerView.Adapter<AdapterMain.ViewHolder>
+
+{
+
+    private Context context;
+    private List<info> data;
+    private LayoutInflater inflater;
+
+
+    public AdapterMain(Context contex, List<info> data) {
+        inflater = LayoutInflater.from(contex);
+        this.data = data;
+        this.context = contex;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.custom_row_main, parent, false);
+        ViewHolder viewHolder = new ViewHolder(view);
+
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        info cur = data.get(position);
+        holder.textView.setText(cur.title);
+        holder.circleImageView.setImageResource(cur.iconid);
+        Typeface font=Typeface.createFromAsset(context.getAssets(),"B Koodak Bold.ttf");
+        holder.textView.setTypeface(font);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView textView;
+        private CircleImageView circleImageView;
+
+        private RippleView r;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            textView = (TextView) itemView.findViewById(R.id.title_main);
+            circleImageView = (CircleImageView) itemView.findViewById(R.id.pic_main);
+
+
+            r= (RippleView) itemView.findViewById(R.id.ripple_main);
+
+            r.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+                @Override
+                public void onComplete(RippleView rippleView) {
+                    info cur=new info();
+                    cur=data.get(getPosition());
+                    Show.title=cur.title;
+                    Show.location=cur.iconid;
+                    Show.body=cur.body;
+                    Show.id=getPosition()+1;
+                    Intent intent=new Intent(context,Show.class);
+                    context.startActivity(intent);
+                }
+            });
+
+        }
+    }
+
+}
+
