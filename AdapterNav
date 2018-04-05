@@ -90,7 +90,7 @@ public class AdapterNav extends RecyclerView.Adapter<AdapterNav.ViewHolder> {
                     }
                     if (getPosition() == 4) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setTitle("Refrence");
+                        builder.setTitle("References");
                         builder.setMessage("www.beytoote.com");
                         builder.setPositiveButton("OK", null);
                         AlertDialog dialog = builder.create();
