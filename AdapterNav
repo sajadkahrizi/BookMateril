@@ -1,0 +1,115 @@
+package ir.anishtan.man;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.andexert.library.RippleView;
+
+import java.util.Collections;
+import java.util.List;
+
+
+
+public class AdapterNav extends RecyclerView.Adapter<AdapterNav.ViewHolder> {
+
+    private LayoutInflater inflater;
+    List<info> data = Collections.emptyList();
+    private Context context;
+
+    public AdapterNav(Context context, List<info> data) {
+        inflater = LayoutInflater.from(context);
+        this.data = data;
+        this.context = context;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view = inflater.inflate(R.layout.custome_row, viewGroup, false);
+        ViewHolder holder = new ViewHolder(view);
+        return holder;
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+        info current = data.get(i);
+        viewHolder.title.setText(current.title);
+        viewHolder.image.setImageResource(current.iconid);
+        Typeface font = Typeface.createFromAsset(context.getAssets(), "B Koodak Bold.ttf");
+        viewHolder.title.setTypeface(font);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        TextView title;
+        ImageView image;
+        RippleView rippleView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            title = (TextView) itemView.findViewById(R.id.list_nac_title);
+            image = (ImageView) itemView.findViewById(R.id.list_nac_image);
+            rippleView = (RippleView) itemView.findViewById(R.id.ripple_re);
+            rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+                @Override
+                public void onComplete(RippleView rippleView) {
+                    if (getPosition() == 0) {
+                        Intent intent = new Intent(context, Search.class);
+                        context.startActivity(intent);
+                    }
+                    if (getPosition() == 1) {
+د
+                        Intent intent = new Intent(context, Favorite.class);
+                        context.startActivity(intent);
+                    }
+                    if (getPosition() == 2) {
+                        Intent intent = new Intent(context, Setting.class);
+                        context.startActivity(intent);
+                    }
+
+                    if (getPosition() == 3) {
+                        Intent intent = new Intent(Intent.ACTION_EDIT);
+                        intent.setData(Uri.parse("bazaar://details?id=" + "ir.anishtan.man"));
+                        intent.setPackage("com.farsitel.bazaar");
+                        context.startActivity(intent);
+                    }
+                    if (getPosition() == 4) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("منابع");
+                        builder.setMessage("www.beytoote.com");
+                        builder.setPositiveButton("خب", null);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                    }
+
+                    if (getPosition() == 5) {
+                        System.exit(0);
+                    }
+                }
+            });
+        }
+
+
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(context, "This Position " + getPosition() + "", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+
